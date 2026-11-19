@@ -5,7 +5,8 @@
   "description": "GLB 离线优化工具链（仅本地使用，不参与小程序打包）",
   "type": "module",
   "scripts": {
-    "make-cube": "node make-cube-glb.mjs"
+    "make-cube": "node make-cube-glb.mjs",
+    "precheck": "node precheck.mjs"
   },
   "devDependencies": {
     "@gltf-transform/cli": "^4.2.1"
