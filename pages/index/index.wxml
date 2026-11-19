@@ -1,0 +1,63 @@
+<view class="page" style="{{styleVars}}">
+
+  <view class="header">
+    <view class="user" bindtap="goLogin" hover-class="tap-dim">
+      <image wx:if="{{user.avatarUrl}}" class="avatar" src="{{user.avatarUrl}}" mode="aspectFill" />
+      <view wx:else class="avatar avatar-empty">登</view>
+    </view>
+
+    <view class="head-text">
+      <text class="title">三维资产库</text>
+      <text class="sub">{{user.nickName ? user.nickName + ' · ' : ''}}{{models.length}} 个模型</text>
+    </view>
+
+    <view class="theme-btn" bindtap="onSwitchTheme" hover-class="tap-dim">
+      <text>{{themeName}}</text>
+    </view>
+  </view>
+
+  <view wx:if="{{error}}" class="banner">{{error}}</view>
+
+  <view class="actions">
+    <view class="action" bindtap="onImportLocal" hover-class="tap-dim">
+      <text class="action-icon">+</text>
+      <text class="action-text">从聊天导入模型</text>
+    </view>
+  </view>
+
+  <view wx:if="{{loading}}" class="tip">正在加载模型列表…</view>
+  <view wx:elif="{{models.length === 0}}" class="tip">还没有模型</view>
+
+  <view class="list">
+    <view
+      class="card"
+      wx:for="{{models}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      bindtap="onTapModel"
+      hover-class="card-hover"
+    >
+      <view class="thumb-wrap">
+        <image wx:if="{{item.thumbnail}}" class="thumb" src="{{item.thumbnail}}" mode="aspectFill" />
+        <view wx:else class="thumb thumb-empty">3D</view>
+      </view>
+
+      <view class="meta">
+        <text class="name">{{item.name}}</text>
+        <text class="source">{{item.source}}</text>
+        <text class="size" wx:if="{{item.sizeText}}">{{item.sizeText}}</text>
+      </view>
+
+      <view
+        wx:if="{{item.isLocal}}"
+        class="del"
+        data-id="{{item.id}}"
+        catchtap="onDeleteLocal"
+        hover-class="tap-dim"
+      >删除</view>
+
+      <view wx:else class="arrow">›</view>
+    </view>
+  </view>
+
+</view>
