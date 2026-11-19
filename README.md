@@ -118,6 +118,48 @@ DCC 导出 → gltf-transform optimize --compress false --texture-size 1024 → 
 
 ---
 
+## 其他人如何使用这个项目
+
+本项目采用 **MIT 协议**，任何人可以自由克隆、学习、修改、商用，无需授权。
+
+### 直接体验
+
+1. 用微信开发者工具（**开发版**）导入本目录
+2. 填入自己的 AppID（没有可用测试号）
+3. 直接编译即可看到列表页与 3D 预览
+4. 本地兜底清单会加载 `assets/glb/cube.glb`，无需配置云端
+
+### 换成自己的模型
+
+1. 把自己的 `.glb` 放进 `cloud-upload/models/`
+2. 运行 `cd tools && node precheck.mjs --base <你的COS域名>`
+   脚本会校验文件并生成 `models.generated.json`
+3. 检查无误后重命名为 `models.json`，上传到自己的 COS
+4. 修改 `app.js` 里的 `modelsUrl` 指向你的云端地址
+5. 在小程序后台配置 request + downloadFile 合法域名
+
+### 你需要自备的东西
+
+| 项目 | 说明 |
+|---|---|
+| 小程序 AppID | 免费注册，个人主体即可 |
+| 腾讯云 COS 或阿里云 OSS | 有免费额度，配置步骤见 `docs/COS开通清单.md` |
+| 模型文件 | 项目内自带的 `helmet-safe.glb` 来自 Khronos 官方示例（CC0） |
+
+### 已知不支持的情况
+
+- `KHR_draco_mesh_compression` / `EXT_meshopt_compression`（见 `docs/DECISIONS.md` D3）
+- FBX / OBJ / STL 等制作格式，需先转换为 GLB
+- 电脑版微信小程序容器（不支持 XR-FRAME 渲染，必须用手机）
+
+---
+
+## 贡献
+
+欢迎提 Issue 或 PR。提交前请先跑一遍 `tools/precheck.mjs`，确保模型文件符合校验规则。
+
+---
+
 ## 开发记录
 
 `docs/DECISIONS.md` 记录了 10 条关键决策与踩坑过程，包括：
