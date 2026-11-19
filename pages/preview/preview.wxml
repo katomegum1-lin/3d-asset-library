@@ -1,0 +1,35 @@
+<view class="page" style="{{styleVars}}">
+
+  <!-- 3D 场景必须由带 renderer: xr-frame 的自定义组件承载 -->
+  <xr-view
+    wx:if="{{modelUrl && viewW}}"
+    id="xr-view"
+    class="xr-view"
+    style="width:{{viewW}}px;height:{{viewH}}px;"
+    width="{{viewW}}"
+    height="{{viewH}}"
+    model-url="{{modelUrl}}"
+    clear-color="{{clearColor}}"
+    bind:ready="handleReady"
+    bind:assetsloaded="handleAssetsLoaded"
+  />
+
+  <!-- 覆盖层 -->
+  <view class="hud">
+    <text class="hud-title">{{modelName}}</text>
+    <text class="hud-tip">单指拖拽旋转 · 双指缩放</text>
+    <text wx:if="{{isLocal}}" class="hud-badge">本地文件</text>
+  </view>
+
+  <button class="share-btn" open-type="share">分享这个模型</button>
+
+  <view wx:if="{{loading}}" class="mask">
+    <view class="spinner"></view>
+    <text class="mask-text">模型加载中…</text>
+  </view>
+
+  <view wx:if="{{err}}" class="mask">
+    <text class="err-text">{{err}}</text>
+  </view>
+
+</view>
