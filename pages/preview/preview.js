@@ -29,10 +29,14 @@ Page({
   onLoad(query) {
     this.modelId = query.id || ''
 
-    const info = wx.getSystemInfoSync()
-    this.setData({ viewW: info.windowWidth, viewH: info.windowHeight })
+    // 用新版 API，getSystemInfoSync 已废弃
+    const win = (wx.getWindowInfo && wx.getWindowInfo()) || wx.getSystemInfoSync()
+    const dev = (wx.getDeviceInfo && wx.getDeviceInfo()) || {}
+    const base = (wx.getAppBaseInfo && wx.getAppBaseInfo()) || {}
 
-    this.initPerf(info)
+    this.setData({ viewW: win.windowWidth, viewH: win.windowHeight })
+
+    this.initPerf(dev, base, win.SDKVersion)
 
     const theme = getTheme()
     this.setData({
@@ -62,7 +66,7 @@ Page({
 
   // ---------- 性能埋点（只 console + 本地缓存，不上报） ----------
 
-  initPerf(info) {
+  initPerf(dev, base, fallbackSdk) {
     this.perf = {
       modelId: this.modelId || '',
       name: '',
@@ -73,9 +77,9 @@ Page({
       totalMs: null,
       ok: false,
       failReason: '',
-      device: `${info.brand || ''} ${info.model || ''}`.trim(),
-      system: info.system || '',
-      sdk: info.SDKVersion || ''
+      device: `${dev.brand || ''} ${dev.model || ''}`.trim(),
+      system: dev.system || '',
+      sdk: base.SDKVersion || fallbackSdk || ''
     }
   },
 
