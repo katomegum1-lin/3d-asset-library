@@ -10,9 +10,6 @@
 const MODELS = require('../../assets/models')
 const { getTheme, toStyleVars, applyNavBar } = require('../../utils/theme')
 
-const PERF_KEY = 'perfLogs'
-const PERF_MAX = 30
-
 Page({
   data: {
     modelUrl: '',
@@ -31,12 +28,7 @@ Page({
 
     // 用新版 API，getSystemInfoSync 已废弃
     const win = (wx.getWindowInfo && wx.getWindowInfo()) || wx.getSystemInfoSync()
-    const dev = (wx.getDeviceInfo && wx.getDeviceInfo()) || {}
-    const base = (wx.getAppBaseInfo && wx.getAppBaseInfo()) || {}
-
     this.setData({ viewW: win.windowWidth, viewH: win.windowHeight })
-
-    this.initPerf(dev, base, win.SDKVersion)
 
     const theme = getTheme()
     this.setData({
@@ -64,62 +56,7 @@ Page({
     this.loadModelsFromCloud()
   },
 
-  // ---------- 性能埋点（只 console + 本地缓存，不上报） ----------
-
-  initPerf(dev, base, fallbackSdk) {
-    this.perf = {
-      modelId: this.modelId || '',
-      name: '',
-      url: '',
-      startAt: Date.now(),
-      assetsMs: null,
-      readyMs: null,
-      totalMs: null,
-      ok: false,
-      failReason: '',
-      device: `${dev.brand || ''} ${dev.model || ''}`.trim(),
-      system: dev.system || '',
-      sdk: base.SDKVersion || fallbackSdk || ''
-    }
-  },
-
-  markFail(reason) {
-    if (!this.perf || this.perf.ok) return
-    this.perf.failReason = reason
-    this.savePerf()
-  },
-
-  savePerf() {
-    const p = this.perf
-    if (!p) return
-
-    p.totalMs = Date.now() - p.startAt
-
-    console.log(
-      `[perf] ${p.ok ? 'OK ' : 'FAIL'} model=${p.modelId || '-'} ` +
-        `assets=${p.assetsMs == null ? '-' : p.assetsMs + 'ms'} ` +
-        `ready=${p.readyMs == null ? '-' : p.readyMs + 'ms'} ` +
-        `total=${p.totalMs}ms` +
-        (p.failReason ? ` reason=${p.failReason}` : '') +
-        ` device=${p.device} sdk=${p.sdk}`
-    )
-
-    try {
-      const logs = wx.getStorageSync(PERF_KEY) || []
-      logs.unshift(Object.assign({}, p))
-      wx.setStorageSync(PERF_KEY, logs.slice(0, PERF_MAX))
-    } catch (e) {
-      // 存储失败不影响主流程
-    }
-  },
-
-  // ---------- 模型地址来源 ----------
-
   applyDirect(url, name, isLocal) {
-    if (this.perf) {
-      this.perf.url = url
-      this.perf.name = name
-    }
     this.setData({ modelUrl: url, modelName: name, isLocal: !!isLocal })
     wx.setNavigationBarTitle({ title: name })
   },
@@ -153,50 +90,27 @@ Page({
 
     if (!hit || !hit.url) {
       this.setData({ loading: false, err: '没有找到对应的模型' })
-      this.markFail('model-not-found')
       return
     }
 
     this.modelId = hit.id
-    if (this.perf) {
-      this.perf.modelId = hit.id
-      this.perf.url = hit.url
-      this.perf.name = hit.name
-    }
     this.setData({ modelUrl: hit.url, modelName: hit.name })
     wx.setNavigationBarTitle({ title: hit.name })
   },
 
-  // ---------- 生命周期 / 渲染回调 ----------
-
   onReady() {
-    // 兜底：12 秒还没就绪就撤掉遮罩，避免永远卡在"加载中"
+    // 兜底：12 秒后撤掉遮罩，避免永远卡在"加载中"
     setTimeout(() => {
-      if (this.data.loading) {
-        this.setData({ loading: false })
-        this.markFail('timeout')
-      }
+      if (this.data.loading) this.setData({ loading: false })
     }, 12000)
   },
 
-  handleAssetsLoaded() {
-    if (this.perf && this.perf.assetsMs == null) {
-      this.perf.assetsMs = Date.now() - this.perf.startAt
-    }
-  },
-
-  handleReady({ detail }) {
-    // detail.value 是场景实例，后续要做播放动画、换材质都从这里拿
-    this.scene = detail && detail.value
-
-    if (this.perf) {
-      this.perf.readyMs = Date.now() - this.perf.startAt
-      this.perf.ok = true
-      this.savePerf()
-    }
-
+  // 组件不会把事件传过来，这里保留空实现防止绑定报错
+  handleReady() {
     this.setData({ loading: false })
   },
+
+  handleAssetsLoaded() {},
 
   onShareAppMessage() {
     // 本地文件没法分享给他人，只分享当前模型信息

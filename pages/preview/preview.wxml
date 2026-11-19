@@ -10,7 +10,7 @@
     height="{{viewH}}"
     model-url="{{modelUrl}}"
     clear-color="{{clearColor}}"
-    bind:ready="handleReady"
+    bind:sceneready="handleReady"
     bind:assetsloaded="handleAssetsLoaded"
   />
 
