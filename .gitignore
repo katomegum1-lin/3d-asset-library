@@ -7,7 +7,10 @@ project.private.config.json
 
 # 构建产物 / 大体积二进制
 *.opt.glb
-cloud-upload/models/*.glb
+cloud-upload/
+
+# 误建的模板工程
+miniprogram-1/
 
 # 系统文件
 .DS_Store
