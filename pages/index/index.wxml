@@ -23,6 +23,9 @@
       <text class="action-icon">+</text>
       <text class="action-text">从聊天导入模型</text>
     </view>
+    <view class="action-help" bindtap="onShowFormatHelp" hover-class="tap-dim">
+      <text>支持哪些格式？</text>
+    </view>
   </view>
 
   <view wx:if="{{loading}}" class="tip">正在加载模型列表…</view>

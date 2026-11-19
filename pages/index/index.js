@@ -102,17 +102,47 @@ Page({
     this.setData({ models: locals.concat(this.remoteModels || []) })
   },
 
+  /** 格式说明 */
+  onShowFormatHelp() {
+    wx.showModal({
+      title: '支持的格式',
+      content:
+        '【可直接预览】\n' +
+        '.glb —— 模型与贴图打包在单个文件里，实时 3D 的标准交付格式\n\n' +
+        '【需要先转换】\n' +
+        '.fbx / .obj / .stl / .3ds / .dae\n' +
+        '这些是制作格式，请先用 FBX2glTF 或 Blender 导出为 glTF 2.0 (.glb)\n\n' +
+        '【不能直接用】\n' +
+        '.gltf —— 依赖外部的 .bin 和贴图文件，从聊天里只能选到单个文件',
+      showCancel: false,
+      confirmText: '知道了'
+    })
+  },
+
   onImportLocal() {
     wx.chooseMessageFile({
       count: 1,
       type: 'file',
-      extension: ['glb'],
+      // 不限制后缀，让用户能选到其他格式，再给出明确的转换指引
+      extension: ['glb', 'gltf', 'fbx', 'obj', 'stl', '3ds', 'dae', 'blend', 'max', 'ma', 'mb'],
       success: (res) => {
         const file = res.tempFiles && res.tempFiles[0]
         if (!file) return
 
-        if (!/\.glb$/i.test(file.name || '')) {
-          wx.showToast({ title: '只支持 .glb 文件', icon: 'none' })
+        const name = file.name || ''
+
+        if (!/\.glb$/i.test(name)) {
+          const ext = (name.match(/\.([^.]+)$/) || [, '未知'])[1].toUpperCase()
+          const isGltfFamily = /\.gltf$/i.test(name)
+
+          wx.showModal({
+            title: `不支持 .${ext} 格式`,
+            content: isGltfFamily
+              ? 'glTF 需要配套的 .bin 和贴图文件，从聊天里只能选到单个文件。\n\n请先在 Blender 里导出为 glTF 2.0 (.glb) 单文件格式。'
+              : `${ext} 是制作格式，小程序无法直接解析。\n\n请先转换为 GLB：\n• 用 FBX2glTF 命令行转换\n• 或在 Blender 中导入后，导出为 glTF 2.0 (.glb)`,
+            showCancel: false,
+            confirmText: '知道了'
+          })
           return
         }
 

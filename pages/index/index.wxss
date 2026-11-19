@@ -115,6 +115,15 @@ page {
   color: var(--sub, #7d8794);
 }
 
+.action-help {
+  margin-top: 14rpx;
+  text-align: center;
+  font-size: 22rpx;
+  color: var(--sub, #7d8794);
+  opacity: 0.75;
+  text-decoration: underline;
+}
+
 /* ---------- 卡片列表 ---------- */
 .list {
   display: flex;
