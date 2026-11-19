@@ -1,7 +1,7 @@
 {
   "description": "移动端三维资产库预览与分享（简历 Demo）",
   "compileType": "miniprogram",
-  "appid": "wxef9caac361bfe513",
+  "appid": "wx8ff315f76615a694",
   "projectname": "3d-asset-library",
   "libVersion": "3.17.6",
   "setting": {
@@ -68,5 +68,6 @@
   },
   "condition": {},
   "simulatorPluginLibVersion": {},
-  "editorSetting": {}
+  "editorSetting": {},
+  "isGameTourist": false
 }
