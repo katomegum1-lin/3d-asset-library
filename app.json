@@ -1,0 +1,17 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/preview/preview",
+    "pages/login/login"
+  ],
+  "window": {
+    "navigationBarTitleText": "三维资产库",
+    "navigationBarBackgroundColor": "#0f1216",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#0f1216",
+    "backgroundTextStyle": "light"
+  },
+  "lazyCodeLoading": "requiredComponents",
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

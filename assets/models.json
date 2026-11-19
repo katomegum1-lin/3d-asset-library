@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "updatedAt": "2026-11-19",
+  "models": [
+    {
+      "id": "cube-demo",
+      "name": "测试立方体",
+      "source": "程序生成（占位素材）",
+      "url": "/assets/glb/cube.glb",
+      "thumbnail": "",
+      "sizeText": "1 KB",
+      "note": "用于验证 XR-FRAME 加载链路。M3 时把 url 换成 COS 的 https 地址。"
+    }
+  ]
+}
