@@ -95,11 +95,25 @@ Page({
     return wx.getStorageSync(LOCAL_KEY) || []
   },
 
+  /** 把 stats 拼成一行可读的规格文案 */
+  buildStatsText(stats) {
+    if (!stats || typeof stats.triangles !== 'number') return ''
+
+    const tri = String(stats.triangles).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+    return stats.maxTextureSize
+      ? `${tri} 面 · 贴图 ${stats.maxTextureSize}px`
+      : `${tri} 面`
+  },
+
   /** 合并「本地导入」+「远端/本地清单」，本地排前面 */
   refreshList(remoteList) {
     if (remoteList) this.remoteModels = remoteList
-    const locals = this.getLocalModels()
-    this.setData({ models: locals.concat(this.remoteModels || []) })
+
+    const decorate = (m) => Object.assign({}, m, { statsText: this.buildStatsText(m.stats) })
+    const locals = this.getLocalModels().map(decorate)
+    const remotes = (this.remoteModels || []).map(decorate)
+
+    this.setData({ models: locals.concat(remotes) })
   },
 
   /** 格式说明 */

@@ -8,17 +8,18 @@
  * 远端仍然读 models.json（格式完全一致），这里的结构要跟它保持一致。
  */
 module.exports = {
-  version: 1,
+  version: 4,
   updatedAt: '2026-11-19',
   models: [
     {
       id: 'cube-demo',
       name: '测试立方体',
-      source: '程序生成（占位素材）',
+      source: '程序生成',
       url: '/assets/glb/cube.glb',
       thumbnail: '',
       sizeText: '1.5 KB',
-      note: '用于验证 XR-FRAME 加载链路。M3 时把 url 换成 COS 的 https 地址。'
+      note: '本地占位模型',
+      stats: { vertices: 24, triangles: 12, maxTextureSize: 0 }
     }
   ]
 }

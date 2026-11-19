@@ -196,8 +196,15 @@ page {
   white-space: nowrap;
 }
 
-.size {
+.stats {
   margin-top: 6rpx;
+  font-size: 22rpx;
+  color: var(--accent, #4c9aff);
+  opacity: 0.8;
+}
+
+.size {
+  margin-top: 4rpx;
   font-size: 22rpx;
   color: var(--sub, #7d8794);
   opacity: 0.75;

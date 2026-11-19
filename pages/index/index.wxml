@@ -48,6 +48,7 @@
       <view class="meta">
         <text class="name">{{item.name}}</text>
         <text class="source">{{item.source}}</text>
+        <text class="stats" wx:if="{{item.statsText}}">{{item.statsText}}</text>
         <text class="size" wx:if="{{item.sizeText}}">{{item.sizeText}}</text>
       </view>
 
