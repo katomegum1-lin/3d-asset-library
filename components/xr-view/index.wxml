@@ -1,0 +1,23 @@
+<xr-scene
+  id="scene"
+  style="width:{{width}}px;height:{{height}}px;"
+  bind:ready="handleSceneReady"
+>
+  <xr-assets bind:loaded="handleAssetsLoaded">
+    <xr-asset-load type="gltf" asset-id="model" src="{{modelUrl}}" />
+  </xr-assets>
+
+  <xr-node node-id="root">
+    <xr-gltf model="model" />
+  </xr-node>
+
+  <xr-camera
+    position="{{cameraPosition}}"
+    target="root"
+    clear-color="{{clearColor}}"
+    camera-orbit-control
+  />
+
+  <xr-light type="ambient" color="1 1 1" intensity="0.9" />
+  <xr-light type="directional" rotation="45 60 0" color="1 1 1" intensity="2.2" />
+</xr-scene>
