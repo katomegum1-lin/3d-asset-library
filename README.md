@@ -53,7 +53,9 @@
 │   ├── batch-convert.py         Blender 无界面转换脚本
 │   ├── optimize.bat             一键优化 GLB（拖拽即可）
 │   ├── precheck.mjs             GLB 预检（校验 + 生成清单）
-│   └── make-cube-glb.mjs        生成测试立方体
+│   ├── make-cube-glb.mjs        生成测试立方体
+│   ├── asset-forge/             ★ 资产转换工作台（带界面的桌面工具）
+│   └── test-assets/             测试用 .ma 场景
 ├── docs/                        ⚠️ 不参与打包
 │   ├── DECISIONS.md             技术决策记录（含 10 条踩坑）
 │   ├── XR-FRAME-API速查.md      API 速查，可直接喂给 AI
@@ -63,6 +65,21 @@
     ├── models.json              上传到 COS 的清单
     └── models/                  优化后的 GLB
 ```
+
+---
+
+## 资产管线工具：Asset Forge
+
+小程序的模型需要先在 DCC 里做完、导出、转换、优化，才能进引擎。
+这段流程原本是十几个手动步骤，容易出错且无法复用，因此做成了一个桌面工具。
+
+![Asset Forge](tools/asset-forge/screenshot.png)
+
+- 拖文件夹 → 自动识别 8 种模型格式 → 输出 FBX / GLB / 优化版 GLB
+- 移动端导出规范固化在工具里：Y 轴向上、保留平滑组、贴图内嵌、禁用 Draco/meshopt
+- 逐文件显示进度、面数与失败原因，单个文件失败不影响其余文件
+
+📂 [使用说明与排障记录](tools/asset-forge/README.md)
 
 ---
 
