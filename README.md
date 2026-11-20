@@ -49,7 +49,10 @@
 │   ├── models.js                本地清单（require 不支持 .json）
 │   └── glb/cube.glb             测试用立方体
 ├── tools/                       ⚠️ 不参与打包
+│   ├── batch-convert.bat        批量 FBX/OBJ/STL → GLB（拖文件夹即可）
+│   ├── batch-convert.py         Blender 无界面转换脚本
 │   ├── optimize.bat             一键优化 GLB（拖拽即可）
+│   ├── precheck.mjs             GLB 预检（校验 + 生成清单）
 │   └── make-cube-glb.mjs        生成测试立方体
 ├── docs/                        ⚠️ 不参与打包
 │   ├── DECISIONS.md             技术决策记录（含 10 条踩坑）
